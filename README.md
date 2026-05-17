@@ -121,7 +121,7 @@ sequenceDiagram
 | Document parsing | pypdf, python-docx |
 | Company search | httpx, BeautifulSoup, DuckDuckGo HTML results |
 | Resume retrieval | Local token-based chunk scoring |
-| Package management | uv for Python, npm for frontend |
+| Package management | venv + pip for Python, npm for frontend |
 
 ## Project Structure
 
@@ -137,8 +137,7 @@ sequenceDiagram
 |   |-- schema.py             # Pydantic domain models
 |   |-- server.py             # FastAPI app, job APIs, chat APIs, static serving
 |   |-- settings.py           # Environment loading and Ollama settings
-|   |-- requirements.txt      # Python dependencies
-|   `-- pyproject.toml        # uv project config
+|   `-- requirements.txt      # Python dependencies
 `-- frontend/
     |-- src/app/page.tsx       # Generator UI
     |-- src/app/chat/page.tsx  # Chat workspace
@@ -150,14 +149,7 @@ sequenceDiagram
 
 - Python 3.12+
 - Node.js 20+
-- uv package manager
 - Local Ollama server or Ollama Cloud API access
-
-Install uv if needed:
-
-```bash
-pip install uv
-```
 
 ## Environment Variables
 
@@ -197,7 +189,10 @@ Install backend dependencies:
 
 ```bash
 cd backend
-python -m uv sync
+python -m venv .venv
+.venv\Scripts\activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
 Install frontend dependencies:
@@ -213,7 +208,8 @@ Start the FastAPI backend:
 
 ```bash
 cd backend
-python -m uv run uvicorn server:app --reload --host 127.0.0.1 --port 8000
+.venv\Scripts\activate
+python -m uvicorn server:app --reload --host 127.0.0.1 --port 8000
 ```
 
 Start the Next.js frontend in another terminal:
@@ -242,7 +238,8 @@ cd ../backend
 Then start FastAPI:
 
 ```bash
-python -m uv run python main.py
+.venv\Scripts\activate
+python main.py
 ```
 
 Open:
@@ -345,8 +342,8 @@ Backend:
 
 ```bash
 cd backend
-python -m uv run ruff check .
-python -m uv run python -m py_compile agent.py main.py server.py settings.py utils.py schema.py documents.py company_search.py resume_rag.py
+.venv\Scripts\activate
+python -m py_compile agent.py main.py server.py settings.py utils.py schema.py documents.py company_search.py resume_rag.py
 ```
 
 Frontend:
